@@ -1,0 +1,451 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		057067A5989CF509D06FBCED /* SearchPanelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E695714412F996A05DF380 /* SearchPanelController.swift */; };
+		2B315DBA0028C39C8E32871F /* VisualEffectBlur.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD8FBB4575933432C481899 /* VisualEffectBlur.swift */; };
+		326CAB4EC3B8621EC5334F63 /* FuzzySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187FCF20C18355EAF2B7705 /* FuzzySearch.swift */; };
+		38B7B4DCFF1DF77B97A6566F /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E0C8C4C93A34F7C7CB6AA5 /* ClipboardItem.swift */; };
+		5901D870F7D5C5DBB057CF6A /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA171E692309EBF6C26F0AD3 /* PreferencesWindowController.swift */; };
+		A8B6863B7A93F7E2E9C0473A /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1822B620CDED5050D0BCE42A /* StatusBarController.swift */; };
+		C786E59E590ED5DAC6519735 /* SearchPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7381A7128C5E9BE1BB23D7 /* SearchPanelView.swift */; };
+		D8DF3BA4E8A89FAB732B5BF7 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141B0E5703F430142E3BBAE /* PreferencesView.swift */; };
+		DE047744BEE239D4CC77191F /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FEA6B724B38483C7772BB0 /* ClipboardMonitor.swift */; };
+		E334092911821D633019E621 /* AlfredMiniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */; };
+		EE4F1184A4F6A2DB21AC0073 /* ClipboardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9866C62683D9098C8A996F4 /* ClipboardStore.swift */; };
+		EE8DEEE30AAF1E8527FA2562 /* ShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E3C79A64A7D29A338C71DC /* ShortcutsManager.swift */; };
+		F07B3C66229DFDE3C2392F00 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F043511B273A2AF6038E70 /* PersistenceController.swift */; };
+		FDB47574155E1A6BC240F1AF /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = AD19047B55352708107DBDD1 /* KeyboardShortcuts */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		15E695714412F996A05DF380 /* SearchPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPanelController.swift; sourceTree = "<group>"; };
+		1822B620CDED5050D0BCE42A /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
+		36E3C79A64A7D29A338C71DC /* ShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsManager.swift; sourceTree = "<group>"; };
+		36F043511B273A2AF6038E70 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlfredMiniApp.swift; sourceTree = "<group>"; };
+		4FD8FBB4575933432C481899 /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
+		5187FCF20C18355EAF2B7705 /* FuzzySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuzzySearch.swift; sourceTree = "<group>"; };
+		5B286B8A3D47EA843F16FE5A /* AlfredMini.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlfredMini.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		67FEA6B724B38483C7772BB0 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
+		85E0C8C4C93A34F7C7CB6AA5 /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
+		9F7381A7128C5E9BE1BB23D7 /* SearchPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPanelView.swift; sourceTree = "<group>"; };
+		A957974594197ABF89FDCD4F /* AlfredMini.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AlfredMini.entitlements; sourceTree = "<group>"; };
+		A9C405F8E84538646D9EA89D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		B141B0E5703F430142E3BBAE /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
+		BA171E692309EBF6C26F0AD3 /* PreferencesWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindowController.swift; sourceTree = "<group>"; };
+		E9866C62683D9098C8A996F4 /* ClipboardStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardStore.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6F7246EB7478888ABC405E0A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FDB47574155E1A6BC240F1AF /* KeyboardShortcuts in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		15CBEFEDD320791CCD1A83F1 /* AlfredMini */ = {
+			isa = PBXGroup;
+			children = (
+				A957974594197ABF89FDCD4F /* AlfredMini.entitlements */,
+				A9C405F8E84538646D9EA89D /* Info.plist */,
+				39C8FEAA949BBD11005748F1 /* App */,
+				2FE8FF537226A75845130DDB /* Clipboard */,
+				E3032540840D546DCED17182 /* MenuBar */,
+				FFF9E5B99792EB3A78318590 /* Models */,
+				845EF846D4BC82A118CA251E /* Preferences */,
+				374ACC5FA8C0599DF7EB43A2 /* Search */,
+				23952D59E3DFC10D12F25E4E /* SearchWindow */,
+				6730436CF35884D4ADC5D5CB /* Shortcuts */,
+				9545C0093D794F1F3EBAFE0E /* Storage */,
+			);
+			path = AlfredMini;
+			sourceTree = "<group>";
+		};
+		23952D59E3DFC10D12F25E4E /* SearchWindow */ = {
+			isa = PBXGroup;
+			children = (
+				15E695714412F996A05DF380 /* SearchPanelController.swift */,
+				9F7381A7128C5E9BE1BB23D7 /* SearchPanelView.swift */,
+				4FD8FBB4575933432C481899 /* VisualEffectBlur.swift */,
+			);
+			path = SearchWindow;
+			sourceTree = "<group>";
+		};
+		2FE8FF537226A75845130DDB /* Clipboard */ = {
+			isa = PBXGroup;
+			children = (
+				67FEA6B724B38483C7772BB0 /* ClipboardMonitor.swift */,
+				E9866C62683D9098C8A996F4 /* ClipboardStore.swift */,
+			);
+			path = Clipboard;
+			sourceTree = "<group>";
+		};
+		374ACC5FA8C0599DF7EB43A2 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				5187FCF20C18355EAF2B7705 /* FuzzySearch.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		39C8FEAA949BBD11005748F1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6730436CF35884D4ADC5D5CB /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				36E3C79A64A7D29A338C71DC /* ShortcutsManager.swift */,
+			);
+			path = Shortcuts;
+			sourceTree = "<group>";
+		};
+		8153506108A50E8073A91A2C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5B286B8A3D47EA843F16FE5A /* AlfredMini.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		845EF846D4BC82A118CA251E /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				B141B0E5703F430142E3BBAE /* PreferencesView.swift */,
+				BA171E692309EBF6C26F0AD3 /* PreferencesWindowController.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		9545C0093D794F1F3EBAFE0E /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				36F043511B273A2AF6038E70 /* PersistenceController.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		BFDA3F5ED5D38C1A33231F78 = {
+			isa = PBXGroup;
+			children = (
+				15CBEFEDD320791CCD1A83F1 /* AlfredMini */,
+				8153506108A50E8073A91A2C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E3032540840D546DCED17182 /* MenuBar */ = {
+			isa = PBXGroup;
+			children = (
+				1822B620CDED5050D0BCE42A /* StatusBarController.swift */,
+			);
+			path = MenuBar;
+			sourceTree = "<group>";
+		};
+		FFF9E5B99792EB3A78318590 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				85E0C8C4C93A34F7C7CB6AA5 /* ClipboardItem.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0D87E5C735048A5FB0047A2D /* AlfredMini */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FBCD93B3B99B53A8B2C2733 /* Build configuration list for PBXNativeTarget "AlfredMini" */;
+			buildPhases = (
+				C277D6A5254A377DCABE3B77 /* Sources */,
+				6F7246EB7478888ABC405E0A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AlfredMini;
+			packageProductDependencies = (
+				AD19047B55352708107DBDD1 /* KeyboardShortcuts */,
+			);
+			productName = AlfredMini;
+			productReference = 5B286B8A3D47EA843F16FE5A /* AlfredMini.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		B5E69F7244AE6FFD385C8BCA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					0D87E5C735048A5FB0047A2D = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 39884342216B193E1A57C0C0 /* Build configuration list for PBXProject "AlfredMini" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = BFDA3F5ED5D38C1A33231F78;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				9FA34E81D15982399D9D4359 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+			);
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0D87E5C735048A5FB0047A2D /* AlfredMini */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C277D6A5254A377DCABE3B77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E334092911821D633019E621 /* AlfredMiniApp.swift in Sources */,
+				38B7B4DCFF1DF77B97A6566F /* ClipboardItem.swift in Sources */,
+				DE047744BEE239D4CC77191F /* ClipboardMonitor.swift in Sources */,
+				EE4F1184A4F6A2DB21AC0073 /* ClipboardStore.swift in Sources */,
+				326CAB4EC3B8621EC5334F63 /* FuzzySearch.swift in Sources */,
+				F07B3C66229DFDE3C2392F00 /* PersistenceController.swift in Sources */,
+				D8DF3BA4E8A89FAB732B5BF7 /* PreferencesView.swift in Sources */,
+				5901D870F7D5C5DBB057CF6A /* PreferencesWindowController.swift in Sources */,
+				057067A5989CF509D06FBCED /* SearchPanelController.swift in Sources */,
+				C786E59E590ED5DAC6519735 /* SearchPanelView.swift in Sources */,
+				EE8DEEE30AAF1E8527FA2562 /* ShortcutsManager.swift in Sources */,
+				A8B6863B7A93F7E2E9C0473A /* StatusBarController.swift in Sources */,
+				2B315DBA0028C39C8E32871F /* VisualEffectBlur.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		0C42BF9CDD0B70B222CC485A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = AlfredMini/AlfredMini.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = AlfredMini/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alfredmini.app;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		0EC1A79EF5D1CC9B9A01A5EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		7502797BFB4A62CE0D1F8039 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A9B504D34189D5EA39F90DF7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = AlfredMini/AlfredMini.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				INFOPLIST_FILE = AlfredMini/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alfredmini.app;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0FBCD93B3B99B53A8B2C2733 /* Build configuration list for PBXNativeTarget "AlfredMini" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0C42BF9CDD0B70B222CC485A /* Debug */,
+				A9B504D34189D5EA39F90DF7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		39884342216B193E1A57C0C0 /* Build configuration list for PBXProject "AlfredMini" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7502797BFB4A62CE0D1F8039 /* Debug */,
+				0EC1A79EF5D1CC9B9A01A5EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		9FA34E81D15982399D9D4359 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AD19047B55352708107DBDD1 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 9FA34E81D15982399D9D4359 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = B5E69F7244AE6FFD385C8BCA /* Project object */;
+}
