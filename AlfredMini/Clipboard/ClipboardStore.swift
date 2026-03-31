@@ -2,51 +2,87 @@ import Foundation
 import AppKit
 import CoreData
 
+enum SortMode: String, CaseIterable {
+    case recent = "Recent"
+    case frequent = "Frequent"
+}
+
 final class ClipboardStore: ObservableObject {
     static let shared = ClipboardStore()
 
-    private let persistence = PersistenceController.shared
-    private var context: NSManagedObjectContext { persistence.container.viewContext }
-
+    private var context: NSManagedObjectContext { PersistenceController.shared.container.viewContext }
+    private var transientItems: [ClipboardItem] = []
     @Published private(set) var items: [ClipboardItem] = []
-
-    private let defaults = UserDefaults.standard
-    private let retentionKey = "retentionLimit"
+    @Published var sortMode: SortMode = .recent { didSet { reload() } }
 
     var retentionLimit: Int {
-        get { max(50, defaults.integer(forKey: retentionKey) == 0 ? 500 : defaults.integer(forKey: retentionKey)) }
-        set { defaults.set(newValue, forKey: retentionKey) }
+        get { max(50, UserDefaults.standard.integer(forKey: "retentionLimit").nonZero ?? 500) }
+        set { UserDefaults.standard.set(newValue, forKey: "retentionLimit") }
     }
 
-    private init() {
-        reload()
-    }
+    private init() { reload() }
 
     func reload() {
         let request = ClipboardItemMO.fetchRequestAll()
-        // Sort by Pinned (desc), UseCount (desc), CreatedAt (desc)
-        let sortPinned = NSSortDescriptor(key: "pinned", ascending: false)
-        let sortCount = NSSortDescriptor(key: "useCount", ascending: false)
-        let sortDate = NSSortDescriptor(key: "createdAt", ascending: false)
-        request.sortDescriptors = [sortPinned, sortCount, sortDate]
-        
-        do {
-            let result = try context.fetch(request)
-            items = result.map { ClipboardItem(id: $0.id, text: $0.text, pinned: $0.pinned, createdAt: $0.createdAt, lastUsedAt: $0.lastUsedAt, useCount: $0.useCount) }
-        } catch {
-            items = []
+        guard let result = try? context.fetch(request) else { items = []; return }
+        let mapped = result.map { ClipboardItem(from: $0) }
+
+        let pinned = mapped.filter { $0.pinned }.sorted { $0.createdAt > $1.createdAt }
+        let pinnedTexts = Set(pinned.map { $0.text })
+        let transientForDisplay = transientItems.filter { !pinnedTexts.contains($0.text) }
+        let transientTexts = Set(transientForDisplay.map { $0.text })
+        let unpinnedPersisted = mapped.filter { !$0.pinned && !transientTexts.contains($0.text) }
+        let unpinned = unpinnedPersisted + transientForDisplay
+
+        let sortedUnpinned: [ClipboardItem]
+        switch sortMode {
+        case .recent:
+            // Sort by most recent activity (copy or use)
+            // Pinned items are not shown in recent tab
+            sortedUnpinned = unpinned.sorted(by: compareByRecent)
+            items = sortedUnpinned
+        case .frequent:
+            // Sort by use count, then by recent activity as tiebreakers
+            // Pinned items are shown at the top in frequent tab
+            let sortedPinned = pinned.sorted(by: compareByFrequent)
+            sortedUnpinned = unpinned.sorted(by: compareByFrequent)
+            items = sortedPinned + sortedUnpinned
         }
     }
 
+    func capture(text: String) {
+        let now = Date()
+        if let idx = transientItems.firstIndex(where: { $0.text == text }) {
+            transientItems[idx] = ClipboardItem(
+                id: transientItems[idx].id,
+                text: text,
+                createdAt: now
+            )
+        } else {
+            transientItems.append(ClipboardItem(text: text, createdAt: now))
+        }
+        if transientItems.count > retentionLimit {
+            transientItems.sort { $0.createdAt > $1.createdAt }
+            transientItems = Array(transientItems.prefix(retentionLimit))
+        }
+        reload()
+    }
+
     func add(text: String, pinned: Bool = false) {
-        let existing = fetchDuplicate(text: text)
-        if let existing = existing {
+        if let existing = fetch(text: text) {
             existing.createdAt = Date()
             existing.lastUsedAt = Date()
             existing.pinned = existing.pinned || pinned
             existing.useCount += 1
         } else {
-            _ = ClipboardItemMO.create(in: context, text: text, pinned: pinned)
+            ClipboardItemMO.create(
+                in: context,
+                text: text,
+                pinned: pinned,
+                createdAt: Date(),
+                lastUsedAt: Date(),
+                useCount: 1
+            )
         }
         save()
         pruneIfNeeded()
@@ -54,100 +90,152 @@ final class ClipboardStore: ObservableObject {
     }
 
     func pin(itemId: UUID, pinned: Bool) {
-        if let obj = fetchById(itemId) {
+        if let obj = fetch(id: itemId) {
             obj.pinned = pinned
             save()
             reload()
+            return
         }
+        guard let item = items.first(where: { $0.id == itemId }) else { return }
+        let obj = fetch(text: item.text) ?? ClipboardItemMO.create(
+            in: context,
+            text: item.text,
+            pinned: pinned,
+            createdAt: item.createdAt,
+            lastUsedAt: item.lastUsedAt,
+            useCount: max(1, item.useCount)
+        )
+        obj.pinned = pinned
+        obj.createdAt = item.createdAt
+        save()
+        removeTransient(text: item.text)
+        reload()
     }
 
     func delete(itemId: UUID) {
-        if let obj = fetchById(itemId) {
+        if let obj = fetch(id: itemId) {
             context.delete(obj)
             save()
+            reload()
+            return
+        }
+        if let item = items.first(where: { $0.id == itemId }) {
+            removeTransient(text: item.text)
             reload()
         }
     }
 
     func copyToPasteboard(item: ClipboardItem) {
-        let pb = NSPasteboard.general
-        pb.clearContents()
-        pb.setString(item.text, forType: .string)
-        if let obj = fetchById(item.id) {
-            obj.lastUsedAt = Date()
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(item.text, forType: .string)
+
+        let now = Date()
+        if let obj = fetch(id: item.id) {
+            obj.lastUsedAt = now
             obj.useCount += 1
-            save()
-            reload()
+        } else if let obj = fetch(text: item.text) {
+            obj.lastUsedAt = now
+            obj.useCount += 1
+            obj.createdAt = item.createdAt
+        } else {
+            _ = ClipboardItemMO.create(
+                in: context,
+                text: item.text,
+                pinned: item.pinned,
+                createdAt: item.createdAt,
+                lastUsedAt: now,
+                useCount: 1
+            )
         }
+        save()
+        removeTransient(text: item.text)
+        reload()
     }
 
     func search(_ query: String) -> [ClipboardItem] {
-        guard !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return items }
-        let q = query.lowercased()
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !q.isEmpty else { return items }
+        
         return items
-            .map { item in (item, FuzzySearch.score(haystack: item.text.lowercased(), needle: q)) }
-            .filter { $0.1 > 0 }
+            .compactMap { item -> (ClipboardItem, Double)? in
+                let score = FuzzySearch.score(haystack: item.text.lowercased(), needle: q)
+                return score > 0 ? (item, Double(score) * (1 + log10(Double(max(1, item.useCount))))) : nil
+            }
             .sorted { lhs, rhs in
                 if lhs.0.pinned != rhs.0.pinned { return lhs.0.pinned }
-                // Boost score by log(useCount) to favor frequent items in search too
-                let lhsScore = Double(lhs.1) * (1.0 + log10(Double(max(1, lhs.0.useCount))))
-                let rhsScore = Double(rhs.1) * (1.0 + log10(Double(max(1, rhs.0.useCount))))
-                
-                if abs(lhsScore - rhsScore) < 1.0 {
-                    return lhs.0.createdAt > rhs.0.createdAt
+                if abs(lhs.1 - rhs.1) >= 1.0 { return lhs.1 > rhs.1 }
+                switch sortMode {
+                case .recent:
+                    return compareByRecent(lhs.0, rhs.0)
+                case .frequent:
+                    return compareByFrequent(lhs.0, rhs.0)
                 }
-                return lhsScore > rhsScore
             }
             .map { $0.0 }
     }
 
-    func pinCurrentClipboardIfText() {
-        if let text = NSPasteboard.general.string(forType: .string)?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
-            add(text: text, pinned: true)
-        }
+    func pinCurrentClipboard() {
+        guard let text = NSPasteboard.general.string(forType: .string)?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !text.isEmpty else { return }
+        add(text: text, pinned: true)
     }
 
-    private func fetchById(_ id: UUID) -> ClipboardItemMO? {
+    // MARK: - Private
+
+    private func fetch(id: UUID) -> ClipboardItemMO? {
         let req = ClipboardItemMO.fetchRequestAll()
         req.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         req.fetchLimit = 1
         return try? context.fetch(req).first
     }
 
-    private func fetchDuplicate(text: String) -> ClipboardItemMO? {
+    private func fetch(text: String) -> ClipboardItemMO? {
         let req = ClipboardItemMO.fetchRequestAll()
         req.predicate = NSPredicate(format: "text == %@", text)
         req.fetchLimit = 1
         return try? context.fetch(req).first
     }
 
+    private func removeTransient(text: String) {
+        transientItems.removeAll { $0.text == text }
+    }
+
     private func pruneIfNeeded() {
         let req = ClipboardItemMO.fetchRequestAll()
-        let sort = NSSortDescriptor(key: #keyPath(ClipboardItemMO.createdAt), ascending: false)
-        req.sortDescriptors = [sort]
+        req.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         guard let all = try? context.fetch(req) else { return }
+        
         let pinned = all.filter { $0.pinned }
-        let others = all.filter { !$0.pinned }
-        if others.count + pinned.count <= retentionLimit { return }
-        let toDelete = others.dropFirst(max(0, retentionLimit - pinned.count))
-        toDelete.forEach { context.delete($0) }
+        let unpinned = all.filter { !$0.pinned }
+        guard pinned.count + unpinned.count > retentionLimit else { return }
+        
+        unpinned.dropFirst(max(0, retentionLimit - pinned.count)).forEach { context.delete($0) }
         save()
     }
 
     private func save() {
-        if context.hasChanges {
-            try? context.save()
-        }
+        guard context.hasChanges else { return }
+        try? context.save()
+    }
+
+    private func lastActivity(of item: ClipboardItem) -> Date {
+        max(item.createdAt, item.lastUsedAt ?? .distantPast)
+    }
+
+    private func compareByRecent(_ lhs: ClipboardItem, _ rhs: ClipboardItem) -> Bool {
+        let lhsActivity = lastActivity(of: lhs)
+        let rhsActivity = lastActivity(of: rhs)
+        if lhsActivity != rhsActivity { return lhsActivity > rhsActivity }
+        if lhs.createdAt != rhs.createdAt { return lhs.createdAt > rhs.createdAt }
+        return lhs.text.localizedCaseInsensitiveCompare(rhs.text) == .orderedAscending
+    }
+
+    private func compareByFrequent(_ lhs: ClipboardItem, _ rhs: ClipboardItem) -> Bool {
+        if lhs.useCount != rhs.useCount { return lhs.useCount > rhs.useCount }
+        return compareByRecent(lhs, rhs)
     }
 }
 
-struct ClipboardItem: Identifiable, Equatable {
-    let id: UUID
-    let text: String
-    let pinned: Bool
-    let createdAt: Date
-    let lastUsedAt: Date?
-    let useCount: Int64
+private extension Int {
+    var nonZero: Int? { self == 0 ? nil : self }
 }
-
-
