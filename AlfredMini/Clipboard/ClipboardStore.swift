@@ -9,6 +9,7 @@ enum SortMode: String, CaseIterable {
 
 final class ClipboardStore: ObservableObject {
     static let shared = ClipboardStore()
+    private static let frequentWindowDays = 15
 
     private var context: NSManagedObjectContext { PersistenceController.shared.container.viewContext }
     private var transientItems: [ClipboardItem] = []
@@ -202,14 +203,25 @@ final class ClipboardStore: ObservableObject {
 
     private func pruneIfNeeded() {
         let req = ClipboardItemMO.fetchRequestAll()
-        req.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         guard let all = try? context.fetch(req) else { return }
-        
+
         let pinned = all.filter { $0.pinned }
         let unpinned = all.filter { !$0.pinned }
         guard pinned.count + unpinned.count > retentionLimit else { return }
-        
-        unpinned.dropFirst(max(0, retentionLimit - pinned.count)).forEach { context.delete($0) }
+
+        // Keep the most valuable unpinned items, ranked by most recent activity
+        // (copy OR use) and then by how often they've been used. This ensures an
+        // item you keep reusing is never evicted just because it was first copied
+        // a long time ago — using an item via the picker only bumps `lastUsedAt`,
+        // not `createdAt`, so ranking by `createdAt` alone silently dropped
+        // frequently-used clips.
+        let ranked = unpinned.sorted { lhs, rhs in
+            let lhsActivity = max(lhs.createdAt, lhs.lastUsedAt ?? .distantPast)
+            let rhsActivity = max(rhs.createdAt, rhs.lastUsedAt ?? .distantPast)
+            if lhsActivity != rhsActivity { return lhsActivity > rhsActivity }
+            return lhs.useCount > rhs.useCount
+        }
+        ranked.dropFirst(max(0, retentionLimit - pinned.count)).forEach { context.delete($0) }
         save()
     }
 
@@ -231,7 +243,11 @@ final class ClipboardStore: ObservableObject {
     }
 
     private func compareByFrequent(_ lhs: ClipboardItem, _ rhs: ClipboardItem) -> Bool {
-        if lhs.useCount != rhs.useCount { return lhs.useCount > rhs.useCount }
+        let cutoff = Calendar.current.date(byAdding: .day, value: -Self.frequentWindowDays, to: Date()) ?? .distantPast
+        let lhsInWindow = lastActivity(of: lhs) >= cutoff
+        let rhsInWindow = lastActivity(of: rhs) >= cutoff
+        if lhsInWindow != rhsInWindow { return lhsInWindow }
+        if lhsInWindow, lhs.useCount != rhs.useCount { return lhs.useCount > rhs.useCount }
         return compareByRecent(lhs, rhs)
     }
 }

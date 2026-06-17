@@ -12,11 +12,14 @@
 		326CAB4EC3B8621EC5334F63 /* FuzzySearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5187FCF20C18355EAF2B7705 /* FuzzySearch.swift */; };
 		38B7B4DCFF1DF77B97A6566F /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85E0C8C4C93A34F7C7CB6AA5 /* ClipboardItem.swift */; };
 		5901D870F7D5C5DBB057CF6A /* PreferencesWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA171E692309EBF6C26F0AD3 /* PreferencesWindowController.swift */; };
+		68A91D0E587845E8F721B4C7 /* PasteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47E6B08808D0C0D7DB842E37 /* PasteHelper.swift */; };
 		A8B6863B7A93F7E2E9C0473A /* StatusBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1822B620CDED5050D0BCE42A /* StatusBarController.swift */; };
 		C786E59E590ED5DAC6519735 /* SearchPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F7381A7128C5E9BE1BB23D7 /* SearchPanelView.swift */; };
+		CFDECFDB515458647E696D15 /* PermissionsHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08A7E5128FD0CADE348B4FD1 /* PermissionsHelper.swift */; };
 		D8DF3BA4E8A89FAB732B5BF7 /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B141B0E5703F430142E3BBAE /* PreferencesView.swift */; };
 		DE047744BEE239D4CC77191F /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67FEA6B724B38483C7772BB0 /* ClipboardMonitor.swift */; };
 		E334092911821D633019E621 /* AlfredMiniApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */; };
+		E806BCCEEB3170BB16D7080F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0687855DE2D9E43E3DB9656E /* Assets.xcassets */; };
 		EE4F1184A4F6A2DB21AC0073 /* ClipboardStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9866C62683D9098C8A996F4 /* ClipboardStore.swift */; };
 		EE8DEEE30AAF1E8527FA2562 /* ShortcutsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36E3C79A64A7D29A338C71DC /* ShortcutsManager.swift */; };
 		F07B3C66229DFDE3C2392F00 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F043511B273A2AF6038E70 /* PersistenceController.swift */; };
@@ -24,10 +27,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0687855DE2D9E43E3DB9656E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		08A7E5128FD0CADE348B4FD1 /* PermissionsHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsHelper.swift; sourceTree = "<group>"; };
 		15E695714412F996A05DF380 /* SearchPanelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPanelController.swift; sourceTree = "<group>"; };
 		1822B620CDED5050D0BCE42A /* StatusBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarController.swift; sourceTree = "<group>"; };
 		36E3C79A64A7D29A338C71DC /* ShortcutsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsManager.swift; sourceTree = "<group>"; };
 		36F043511B273A2AF6038E70 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		47E6B08808D0C0D7DB842E37 /* PasteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteHelper.swift; sourceTree = "<group>"; };
 		4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlfredMiniApp.swift; sourceTree = "<group>"; };
 		4FD8FBB4575933432C481899 /* VisualEffectBlur.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBlur.swift; sourceTree = "<group>"; };
 		5187FCF20C18355EAF2B7705 /* FuzzySearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuzzySearch.swift; sourceTree = "<group>"; };
@@ -58,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				A957974594197ABF89FDCD4F /* AlfredMini.entitlements */,
+				0687855DE2D9E43E3DB9656E /* Assets.xcassets */,
 				A9C405F8E84538646D9EA89D /* Info.plist */,
 				39C8FEAA949BBD11005748F1 /* App */,
 				2FE8FF537226A75845130DDB /* Clipboard */,
@@ -87,6 +94,7 @@
 			children = (
 				67FEA6B724B38483C7772BB0 /* ClipboardMonitor.swift */,
 				E9866C62683D9098C8A996F4 /* ClipboardStore.swift */,
+				47E6B08808D0C0D7DB842E37 /* PasteHelper.swift */,
 			);
 			path = Clipboard;
 			sourceTree = "<group>";
@@ -103,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				4EC9926C9AF6D37290927113 /* AlfredMiniApp.swift */,
+				08A7E5128FD0CADE348B4FD1 /* PermissionsHelper.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -172,6 +181,7 @@
 			buildConfigurationList = 0FBCD93B3B99B53A8B2C2733 /* Build configuration list for PBXNativeTarget "AlfredMini" */;
 			buildPhases = (
 				C277D6A5254A377DCABE3B77 /* Sources */,
+				674995542DD625ED6794FDE4 /* Resources */,
 				6F7246EB7478888ABC405E0A /* Frameworks */,
 			);
 			buildRules = (
@@ -222,6 +232,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		674995542DD625ED6794FDE4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E806BCCEEB3170BB16D7080F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C277D6A5254A377DCABE3B77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -232,6 +253,8 @@
 				DE047744BEE239D4CC77191F /* ClipboardMonitor.swift in Sources */,
 				EE4F1184A4F6A2DB21AC0073 /* ClipboardStore.swift in Sources */,
 				326CAB4EC3B8621EC5334F63 /* FuzzySearch.swift in Sources */,
+				68A91D0E587845E8F721B4C7 /* PasteHelper.swift in Sources */,
+				CFDECFDB515458647E696D15 /* PermissionsHelper.swift in Sources */,
 				F07B3C66229DFDE3C2392F00 /* PersistenceController.swift in Sources */,
 				D8DF3BA4E8A89FAB732B5BF7 /* PreferencesView.swift in Sources */,
 				5901D870F7D5C5DBB057CF6A /* PreferencesWindowController.swift in Sources */,

@@ -7,22 +7,12 @@ struct PreferencesView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Shortcuts").font(.headline)
-                HStack {
-                    Text("Show Search:")
-                    KeyboardShortcuts.Recorder(for: .showSearch)
-                }
-                HStack {
-                    Text("Quick Pin:")
-                    KeyboardShortcuts.Recorder(for: .quickPin)
-                }
+            Section("Shortcuts") {
+                HStack { Text("Show Search:"); KeyboardShortcuts.Recorder(for: .showSearch) }
+                HStack { Text("Quick Pin:"); KeyboardShortcuts.Recorder(for: .quickPin) }
             }
-
             Divider()
-
-            VStack(alignment: .leading, spacing: 10) {
-                Text("Retention").font(.headline)
+            Section("Retention") {
                 HStack {
                     Text("Max items: \(Int(retention))")
                     Slider(value: $retention, in: 50...2000, step: 50)
@@ -31,11 +21,14 @@ struct PreferencesView: View {
         }
         .padding(20)
         .frame(width: 480)
-        .onAppear {
-            retention = Double(store.retentionLimit)
-        }
-        .onChange(of: retention) { newValue in
-            store.retentionLimit = Int(newValue)
+        .onAppear { retention = Double(store.retentionLimit) }
+        .onChange(of: retention) { store.retentionLimit = Int($0) }
+    }
+    
+    private func Section(_ title: String, @ViewBuilder content: () -> some View) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(title).font(.headline)
+            content()
         }
     }
 }

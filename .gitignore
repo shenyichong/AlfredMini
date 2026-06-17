@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Build artifacts
+build/
+dist/
+*.dmg
+
+# Xcode user-specific state
+**/xcuserdata/
+*.xcuserstate
+
+# Generated Xcode project (regenerated from project.yml via xcodegen)
+*.xcarchive

@@ -1,0 +1,49 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Build Commands
+
+**Prerequisites:** [XcodeGen](https://github.com/yonaskolb/XcodeGen) must be installed (`brew install xcodegen`).
+
+```bash
+# Regenerate the Xcode project (required after modifying project.yml)
+xcodegen generate
+
+# Build and run from command line
+xcodebuild -scheme AlfredMini -configuration Debug build
+
+# Build distributable DMG
+./scripts/build_dmg.sh
+```
+
+For day-to-day development, open `AlfredMini.xcodeproj` in Xcode and use `Cmd+R`. There are no automated tests in this project.
+
+## Architecture Overview
+
+This is a macOS menu bar app (no dock icon — `LSUIElement: true`) that monitors the clipboard and provides a floating search panel. App Sandbox is **disabled** to allow Accessibility API usage (global hotkeys + simulated paste).
+
+**Entry point:** `AppDelegate` in `AlfredMiniApp.swift` wires together the three top-level components on launch: `StatusBarController`, `ShortcutsManager`, and `ClipboardMonitor`.
+
+**Data flow:**
+1. `ClipboardMonitor` polls `NSPasteboard` every 0.5s and calls `ClipboardStore.shared.capture(text:)` on changes.
+2. `ClipboardStore` (singleton `ObservableObject`) manages two tiers of storage:
+   - **Transient items**: in-memory only, for items not yet explicitly used/pinned.
+   - **Persisted items**: Core Data via `PersistenceController`, for items that have been pasted, pinned, or otherwise interacted with.
+3. `SearchPanelView` observes `ClipboardStore.shared` and calls `store.search(_:)` for fuzzy-filtered results. Selecting an item calls `store.copyToPasteboard(item:)` (which persists/increments useCount), then `PasteHelper.paste()` simulates `Cmd+V` via Accessibility APIs.
+
+**Key singletons:** `ClipboardStore.shared`, `SearchPanelController.shared`, `PersistenceController.shared`.
+
+**Core Data model** is built programmatically in `PersistenceController.buildModel()` — there is no `.xcdatamodeld` file. The single entity is `ClipboardItem` / `ClipboardItemMO`.
+
+**`ClipboardItem` vs `ClipboardItemMO`:** `ClipboardItemMO` is the Core Data managed object. `ClipboardItem` is a plain Swift struct used as the view model throughout the UI.
+
+**Window management:** `SearchPanelController` manages a borderless `NSPanel` that floats above all windows (`.screenSaver` level). It tracks the previously active app to restore focus after paste.
+
+**Keyboard shortcuts:** Registered via the [KeyboardShortcuts](https://github.com/sindresorhus/KeyboardShortcuts) package. Global shortcuts (`showSearch`, `quickPin`) are in `ShortcutsManager`. In-panel key handling (arrows, enter, cmd+digit, etc.) is done via `NSEvent.addLocalMonitorForEvents` inside the `KeyboardHandler` `NSViewRepresentable` in `SearchPanelView.swift`.
+
+**Sort modes:** `SortMode.recent` shows only unpinned items sorted by copy time. `SortMode.frequent` shows pinned items first, then all others sorted by `useCount`.
+
+## Project Configuration
+
+The Xcode project is generated from `project.yml` (XcodeGen). Do not hand-edit `.xcodeproj` — regenerate with `xcodegen generate` instead. The only Swift package dependency is `KeyboardShortcuts` by Sindre Sorhus.

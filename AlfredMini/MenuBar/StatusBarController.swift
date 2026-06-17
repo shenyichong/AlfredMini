@@ -1,53 +1,44 @@
 import AppKit
 
 final class StatusBarController: NSObject, NSMenuDelegate {
-    private let statusItem: NSStatusItem
+    private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let store = ClipboardStore.shared
 
     override init() {
-        statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
-        statusItem.button?.title = "📋"
+        if let icon = NSImage(systemSymbolName: "list.clipboard", accessibilityDescription: "AlfredMini") {
+            icon.isTemplate = true
+            statusItem.button?.image = icon
+        } else {
+            statusItem.button?.title = "📋"
+        }
         let menu = NSMenu()
         menu.delegate = self
         statusItem.menu = menu
-        rebuildMenu()
     }
 
     func menuNeedsUpdate(_ menu: NSMenu) {
-        rebuildMenu()
-    }
-
-    private func rebuildMenu() {
-        guard let menu = statusItem.menu else { return }
         menu.removeAllItems()
-
-        // Recent items (top 10)
-        let recent = Array(store.items.prefix(10))
-        if recent.isEmpty == false {
-            for item in recent {
-                let title = ellipsize(item.text.replacingOccurrences(of: "\n", with: " ⏎ "), max: 60)
-                let mi = NSMenuItem(title: title, action: #selector(copyRecent(_:)), keyEquivalent: "")
-                mi.target = self
-                mi.representedObject = item.id
-                menu.addItem(mi)
-            }
-            menu.addItem(NSMenuItem.separator())
+        
+        for item in store.items.prefix(10) {
+            let title = item.text.replacingOccurrences(of: "\n", with: " ⏎ ").prefix(60)
+            let mi = NSMenuItem(title: String(title) + (item.text.count > 60 ? "…" : ""), action: #selector(copyRecent), keyEquivalent: "")
+            mi.target = self
+            mi.representedObject = item.id
+            menu.addItem(mi)
         }
-
-        let openItem = NSMenuItem(title: "Open Search", action: #selector(openSearch), keyEquivalent: "")
-        openItem.target = self
-        menu.addItem(openItem)
-
-        let prefsItem = NSMenuItem(title: "Preferences…", action: #selector(openPreferences), keyEquivalent: ",")
-        prefsItem.target = self
-        menu.addItem(prefsItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        let quitItem = NSMenuItem(title: "Quit AlfredMini", action: #selector(quit), keyEquivalent: "q")
-        quitItem.target = self
-        menu.addItem(quitItem)
+        
+        if !store.items.isEmpty { menu.addItem(.separator()) }
+        menu.addItem(menuItem("Open Search", #selector(openSearch)))
+        menu.addItem(menuItem("Preferences…", #selector(openPreferences), ","))
+        menu.addItem(.separator())
+        menu.addItem(menuItem("Quit AlfredMini", #selector(quit), "q"))
+    }
+    
+    private func menuItem(_ title: String, _ action: Selector, _ key: String = "") -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: key)
+        item.target = self
+        return item
     }
 
     @objc private func copyRecent(_ sender: NSMenuItem) {
@@ -56,23 +47,8 @@ final class StatusBarController: NSObject, NSMenuDelegate {
         store.copyToPasteboard(item: item)
     }
 
-    @objc private func openSearch() {
-        SearchPanelController.shared.show()
-    }
-
-    @objc private func openPreferences() {
-        PreferencesWindowController.shared.show()
-    }
-
-    @objc private func quit() {
-        NSApp.terminate(nil)
-    }
-
-    private func ellipsize(_ s: String, max: Int) -> String {
-        if s.count <= max { return s }
-        let prefix = s.prefix(max - 1)
-        return String(prefix) + "…"
-    }
+    @objc private func openSearch() { SearchPanelController.shared.show() }
+    @objc private func openPreferences() { PreferencesWindowController.shared.show() }
+    @objc private func quit() { NSApp.terminate(nil) }
 }
-
 
