@@ -6,6 +6,11 @@ APP_NAME="AlfredMini"
 SCHEME="AlfredMini"
 BUILD_DIR="build"
 DMG_NAME="${APP_NAME}.dmg"
+BUNDLE_ID="com.alfredmini.app"
+# Stable local code-signing identity. Signing every build with the same
+# self-signed cert keeps macOS Accessibility permission across rebuilds, so the
+# user only grants it once. Create it with: scripts/create_signing_cert.sh
+SIGN_ID="AlfredMini Local Signing"
 
 echo "🚀 Starting build for ${APP_NAME}..."
 
@@ -32,6 +37,17 @@ xcodebuild -exportArchive \
   -exportOptionsPlist "scripts/exportOptions.plist" \
   -exportPath "${BUILD_DIR}/Export" \
   -quiet
+
+# 3b. Re-sign with the stable local identity (falls back to ad-hoc if missing)
+APP_PATH="${BUILD_DIR}/Export/${APP_NAME}.app"
+if security find-identity -p codesigning | grep -q "${SIGN_ID}"; then
+  echo "🔏 Signing with '${SIGN_ID}' (stable identity → Accessibility persists)..."
+  codesign --force --deep --sign "${SIGN_ID}" --identifier "${BUNDLE_ID}" "${APP_PATH}"
+  codesign --verify --deep --strict "${APP_PATH}" && echo "✅ Signature verified."
+else
+  echo "⚠️  Signing identity '${SIGN_ID}' not found; keeping ad-hoc signature."
+  echo "    Accessibility will reset every rebuild. Run scripts/create_signing_cert.sh once to fix."
+fi
 
 # 4. Create DMG
 echo "💿 Creating DMG..."
